@@ -138,20 +138,26 @@ st.session_state.prev_put = new_put
 col1, col2 = st.columns(2)
 
 with col1:
-    with st.container(height=125, border=True):
-        st.metric(
-            label="Call Option Value", 
-            value=f"${round(new_call, 2)}",
-            delta=f"{round(call_diff, 2)}"
-        )
+    # Using the custom class for CALL value
+    st.markdown(f"""
+        <div class="metric-container metric-call">
+            <div>
+                <div class="metric-label">CALL Value</div>
+                <div class="metric-value">${new_call:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
 with col2:
-    with st.container(height=125, border=True):
-        st.metric(
-            label="Put Option Value", 
-            value=f"${round(new_put, 2)}",
-            delta=f"{round(put_diff, 2)}"
-        )
+    # Using the custom class for PUT value
+    st.markdown(f"""
+        <div class="metric-container metric-put">
+            <div>
+                <div class="metric-label">PUT Value</div>
+                <div class="metric-value">${new_put:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
 
 # sidebar: headtmap inputs
