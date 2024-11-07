@@ -1,2 +1,2 @@
 # BlackScholesMerton
-#BSOPM implemented using streamlit
+BSOPM implemented using streamlit
