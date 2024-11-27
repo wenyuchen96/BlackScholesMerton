@@ -225,7 +225,7 @@ with col5:
     fig1, ax1 = plt.subplots(figsize=(8, 6)) 
     custom_cmap = sns.light_palette("seagreen", as_cmap=True)
     sns.heatmap(call_df, ax=ax1, cmap=custom_cmap, annot=True, fmt='.2f', 
-                linewidths=0.5, cbar=True, annot_kws={"fontsize": 8})
+                linewidths=0.5, cbar=True, annot_kws={"fontsize": 8},cbar_kws={"format": '%.1f'})
     # ax1.set_title("Call Option Value Sensitivity")
     ax1.set_xlabel("Volatility")
     ax1.set_ylabel("Stock Price")
@@ -242,7 +242,7 @@ with col6:
     fig2, ax2 = plt.subplots(figsize=(8, 6))  
     custom_cmap2 = sns.color_palette("Blues", as_cmap=True)
     sns.heatmap(put_df, ax=ax2, cmap=custom_cmap2, annot=True, fmt='.2f', 
-                linewidths=0.5, cbar=True, annot_kws={"fontsize": 8})
+                linewidths=0.5, cbar=True, annot_kws={"fontsize": 8},cbar_kws={"format": '%.1f'})
     # ax2.set_title("Put Option Value Sensitivity")
     ax2.set_xlabel("Volatility")
     ax2.set_ylabel("Stock Price")
