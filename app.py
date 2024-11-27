@@ -6,6 +6,13 @@ from scipy.stats import norm
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Page configuration
+st.set_page_config(
+    page_title="BSOPM",
+    page_icon="📈",
+    layout="wide",
+    initial_sidebar_state="expanded")
+
 st.markdown("""
 <style>
 .metric-container {
@@ -23,7 +30,7 @@ st.markdown("""
     border-radius: 10px;
 }
 .metric-put {
-    background-color: #ffcccb;
+    background-color: #80afd6;
     color: black;
     border-radius: 10px;
 }
@@ -39,7 +46,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.header('Black–Scholes–Merton Option Pricing Model')
+st.header('Black–Scholes–Merton Option Pricing Model',divider="gray")
 # a black scholes merton option prcing model that value call and put options
 #S: underlying stock price in USD actuals
 #K: strike price in USD actuals
@@ -114,7 +121,7 @@ if 'prev_put' not in st.session_state:
     st.session_state.prev_put = 0
 
 # sidebar: model inputs
-st.sidebar.subheader("Model inputs")
+st.sidebar.subheader("Option Model Inputs")
 S = st.sidebar.number_input("Underlying stock price (USD)", value=100.0, step=1.0)
 K = st.sidebar.number_input("Strike price (USD)", value=50.0, step=1.0)
 T = st.sidebar.number_input("Time to maturity (years)", value=10.0, step=1.0)
@@ -161,7 +168,7 @@ with col2:
 
 
 # sidebar: headtmap inputs
-st.sidebar.subheader("Heatmap inputs")
+st.sidebar.subheader("Heatmap Inputs")
 S_sensitivity = st.sidebar.slider(
     "Range of underlying stock price",
     0.0,
@@ -198,46 +205,51 @@ def generate_sensitivity_df(bsm, S_range, sigma_range, num_points=10):
 # Generate sensitivity dataframes
 call_df, put_df = generate_sensitivity_df(bsm, S_sensitivity, sigma_sensitivity)
 
-# Create heatmaps
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
-
 # Function to format tick labels
 def format_ticks(x, pos):
     return f'{x:.2f}'
 
-# Call Option Heatmap
-custom_cmap = sns.light_palette("seagreen", as_cmap=True)
-sns.heatmap(call_df, ax=ax1, cmap=custom_cmap, annot=True, fmt='.2f', 
-            linewidths=0.5, cbar=True)
-ax1.set_title("Call Option Value Sensitivity")
-ax1.set_xlabel("Volatility")
-ax1.set_ylabel("Stock Price")
+st.header('Interactive Option Value Heatmap',divider="gray")
+st.caption("This interactive heatmap illustrates how stock price and volatility affect option values. The x-axis shows volatility, y-axis represents stock prices, and color intensity indicates option value. Users can switch between call and put options, and select sensitivity ranges. It's a tool for visualizing option pricing sensitivities.")
 
-# Set correct tick locations and labels
-ax1.set_xticks(np.arange(len(call_df.columns)) + 0.5)
-ax1.set_yticks(np.arange(len(call_df.index)) + 0.5)
-ax1.set_xticklabels([f'{x:.2f}' for x in call_df.columns])
-ax1.set_yticklabels([f'{y:.2f}' for y in call_df.index])
+col3, col4 = st.columns(2)
 
-# Put Option Heatmap
+with col3:
+    st.subheader("Call Option Value Heatmap")
+with col4:
+    st.subheader("Put Option Value Heatmap")
 
-sns.heatmap(put_df, ax=ax2, cmap=custom_cmap, annot=True, fmt='.2f', 
-            linewidths=0.5, cbar=True)
-ax2.set_title("Put Option Value Sensitivity")
-ax2.set_xlabel("Volatility")
-ax2.set_ylabel("Stock Price")
+col5, col6 = st.columns(2)
+with col5:
+    # Create a new figure for the call option heatmap
+    fig1, ax1 = plt.subplots(figsize=(8, 6)) 
+    custom_cmap = sns.light_palette("seagreen", as_cmap=True)
+    sns.heatmap(call_df, ax=ax1, cmap=custom_cmap, annot=True, fmt='.2f', 
+                linewidths=0.5, cbar=True, annot_kws={"fontsize": 8})
+    # ax1.set_title("Call Option Value Sensitivity")
+    ax1.set_xlabel("Volatility")
+    ax1.set_ylabel("Stock Price")
+    ax1.set_xticks(np.arange(len(call_df.columns)) + 0.5)
+    ax1.set_yticks(np.arange(len(call_df.index)) + 0.5)
+    ax1.set_xticklabels([f'{x:.2f}' for x in call_df.columns], fontsize=8) 
+    ax1.set_yticklabels([f'{y:.2f}' for y in call_df.index], fontsize=8)   
 
-# Set correct tick locations and labels
-ax2.set_xticks(np.arange(len(put_df.columns)) + 0.5)
-ax2.set_yticks(np.arange(len(put_df.index)) + 0.5)
-ax2.set_xticklabels([f'{x:.2f}' for x in put_df.columns])
-ax2.set_yticklabels([f'{y:.2f}' for y in put_df.index])
+    plt.setp(ax1.get_xticklabels(), rotation=0, ha="center")
+    st.pyplot(fig1)  # Render the first heatmap in col5
 
-# Rotate the tick labels and set their alignment
-plt.setp(ax1.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
-plt.setp(ax2.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+with col6:
+    # Create a new figure for the put option heatmap
+    fig2, ax2 = plt.subplots(figsize=(8, 6))  
+    custom_cmap2 = sns.color_palette("Blues", as_cmap=True)
+    sns.heatmap(put_df, ax=ax2, cmap=custom_cmap2, annot=True, fmt='.2f', 
+                linewidths=0.5, cbar=True, annot_kws={"fontsize": 8})
+    # ax2.set_title("Put Option Value Sensitivity")
+    ax2.set_xlabel("Volatility")
+    ax2.set_ylabel("Stock Price")
+    ax2.set_xticks(np.arange(len(put_df.columns)) + 0.5)
+    ax2.set_yticks(np.arange(len(put_df.index)) + 0.5)
+    ax2.set_xticklabels([f'{x:.2f}' for x in put_df.columns], fontsize=8)  
+    ax2.set_yticklabels([f'{y:.2f}' for y in put_df.index], fontsize=8)   
 
-# Adjust layout to prevent clipping of tick labels
-plt.tight_layout()
-
-st.pyplot(fig)
+    plt.setp(ax2.get_xticklabels(), rotation=0, ha="center")
+    st.pyplot(fig2)  # Render the second heatmap in col6
