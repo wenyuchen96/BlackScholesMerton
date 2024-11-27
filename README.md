@@ -8,8 +8,7 @@ This project is an interactive tool built with Streamlit to visualize and calcul
 
 Features
 
-	•	Dynamic Inputs: Adjust stock price, strike price, time to maturity, risk-free rate, and volatility.
-	•	Option Valuation: Real-time calculation of call and put values using the Black-Scholes-Merton model.
-	•	Sensitivity Analysis: Heatmaps to visualize how option prices vary with stock prices and volatility.
-	•	Greeks Calculation: Analyze the Delta, Gamma, Theta, Vega, and Rho for both call and put options.
-	•	Interactive UI: User-friendly interface with adjustable ranges and visual output.
+• Dynamic Inputs: Adjust stock price, strike price, time to maturity, risk-free rate, and volatility.
+• Option Valuation: Real-time calculation of call and put values using the Black-Scholes-Merton model.
+• Sensitivity Analysis: Heatmaps to visualize how option prices vary with stock prices and volatility.
+• Interactive UI: User-friendly interface with adjustable ranges and visual output.
